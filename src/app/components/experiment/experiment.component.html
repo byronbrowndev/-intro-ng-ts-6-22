@@ -6,4 +6,9 @@
   <p>If the time is right, start creating.</p>
   <p>Otherwise, return <a routerLink="/home">home</a> until you're ready.</p>
   <p>{{ sentence }}</p>
+
+  <!-- create a list of those sentences -->
+  <ul>
+    <li *ngFor="let detail of inventorDetails"> {{ detail }}!!</li>
+  </ul>
 </div>
