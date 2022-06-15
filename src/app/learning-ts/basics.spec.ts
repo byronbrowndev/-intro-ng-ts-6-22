@@ -1,3 +1,5 @@
+import { Inventor, isEven } from "../components/experiment/utils";
+
 describe('variables, data types, typing', () => {
   it('should declare a variable', () => {
     // var name; don't nope, stop, go back
@@ -143,18 +145,21 @@ describe('variables, data types, typing', () => {
         [key: string]: any // ** this allows us to use a variable in the bracket notation
       }
 
+      const courses: string[] = ['intro to Ng using Ts', 'web 50'];
+      const project: string = 'servicing 2'
 
       const instructor: Tutor = {
         name: 'byron',
-        project: 'servicing 2',
+        project,
         org: 'ero',
-        campus: 2
+        campus: 2,
+        courses
       }
 
       let prop: string = 'org';
       console.log(instructor.campus)
       console.log(instructor['name'])
-      console.log(instructor[prop]) // refer to the interface of tutor
+      // console.log(instructor[prop]) // refer to the interface of tutor
     })
 
     it(' talks about booleans', () => {
@@ -166,7 +171,7 @@ describe('variables, data types, typing', () => {
 
       hasInstructor = !!instructor;
 
-      if (!!instructor) {
+      if (instructor) {
         // do something
       }
 
@@ -185,9 +190,13 @@ describe('variables, data types, typing', () => {
       isInternal: boolean,
       campus: number | string
       classes: string[]
-
     }
     let instructor: Instructor;
+
+    // let ram: Instructor = {
+    //   name: 'ram',
+    //   mainProject: ''
+    // }
   });
 
   describe('functions', () => {
@@ -208,13 +217,44 @@ describe('variables, data types, typing', () => {
         }
       })
 
-      it('is an arrow function', () => {
+      it('is an arrow function with the return keyword', () => {
+        // create a const who's value is an arrow function
+        // the function should add two numbers and return the result
+        const add = (num1: number, num2: number): number => {
+          return num1 + num2;
+        }
 
+        const addTwoNumbersArrowFunction = (num1: number, num2: number): number => { return num1 + num2 };
+      })
+
+      it('is an arrow function', () => {
+        // create a const who's value is an arrow function
+        // the function should add two numbers and return the result
+        const add = (num1: number, num2: number): number => num1 + num2 // implicit return
+        const sum = add(3, 4);
+        expect(sum).toBe(7);
       })
     })
 
 
   });
+
+  // params, and the function return
+  const addTwoNumbers: (num1: number, num2: number) => number = function (num1: number, num2: number): number {
+    return num1 + num2
+  }
+
+  let isThisEven = isEven(7); // imported from elsewhere
+
+  const addSomeNumbers1 = (num1: number, num2: number = 10, num3?: number) => {
+    if (num3) {
+      return num1 + num2 + num3;
+    }
+    return num1 + num2;
+  }
+
+  const addSomeNumbers2 = (num1: number, num2: number = 10, num3?: number) => num3 ? num1 + num2 + num3 : num1 + num2;
+
 
 
 
@@ -292,5 +332,117 @@ describe('variables, data types, typing', () => {
   function getName() {
     return 'this is a string';
   }
+
+
+  describe('destructuring', () => {
+    describe('object destructuring', () => {
+      const inventor: Inventor & { number: number } = { first: 'Albert', last: 'Einstein', year: 1879, passed: 1955, number: 57893 };
+      it('how would you do this', () => {
+        // extract this properties into their own variables
+        const firstName = inventor.first;
+        const lastName = inventor.last;
+      })
+
+      it('should use object destructuring', () => {
+        const { first, last, year } = inventor;
+        expect(first).toBe('Albert');
+      })
+
+      it('should use object destructuring with renaming', () => {
+        const { first, last, year: birthYear } = inventor;
+        expect(birthYear).toBe(inventor.year);
+      })
+
+      it('should rename to not use number as variable name', () => {
+        const { number: socialSecurityNumber } = inventor;
+        expect(socialSecurityNumber).toBe(inventor.number);
+      })
+
+      it('should create an object literal describing something', () => {
+        // describe and object literal
+        // use object destructuring to extract the properties into their own variables
+      })
+    })
+
+    describe('array destructuring', () => {
+      const people = ['ali', 'james', 'adam', 'sherene', 'nina', 'kelsey'];
+      it('is the prior way of extracting elements by index', () => {
+        const person1 = people[0];
+        const person2 = people[3];
+      })
+
+      it('using array destructuring', () => {
+        const [aliVariable, , adamVariable, , ninaVariable] = people;
+        expect(ninaVariable).toBe(people[4]);
+      })
+    })
+
+    describe('named param destructuring', () => {
+      // ******** circle back *******
+      // const instructor = {
+      //   name: 'byron',
+      //   project: 's2',
+      //   org: 'ero',
+      //   campus: 2,
+      //   courses: []
+      // }
+
+      // function whereDoesHeWork({name: string, project: string}) {
+      //   return `${name} works on the ${project} project`;
+      // }
+
+      // const sentence = whereDoesHeWork(ins);
+      // co
+    })
+  })
+
+  describe('rest and spread', () => {
+    describe('spread', () => {
+      // spread the contents of this array/object across the new array/object
+      it('should talk about spread w/ objects', () => {
+        let instructor = {
+          name: 'byron',
+          project: 's2',
+          org: 'ero',
+          campus: 2,
+        }
+
+        const deepCopyOfinstructor = {
+          ...instructor,
+        }
+
+        const instructorWithCourses = {
+          ...instructor,
+          courses: ['', '']
+        }
+
+        const instructorOveride = {
+          ...instructor,
+          campus: 'discovery',
+        }
+
+        const people = ['ali', 'james', 'adam', 'sherene', 'nina', 'kelsey']
+
+        const deepCopyOfPeopleWithTahir = [...people, 'tahir']
+
+        expect(deepCopyOfPeopleWithTahir[6]).toBe('tahir');
+      })
+    })
+
+    describe('rest', () => {
+      function addNumbers(num1: number, num2: number, ...otherNumbers: number[]) {
+        if (!otherNumbers) {
+          return num1 + num2
+        }
+        let sum = num1 + num2
+        otherNumbers.forEach(num => sum + num);
+        return sum;
+      }
+
+      addNumbers(7, 5);
+      addNumbers(8, 23, 5, 5, 6, 7)
+
+    })
+  })
 
 })

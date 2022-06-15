@@ -18,13 +18,14 @@ export class PokemonComponent implements OnInit {
 
   // Pokemon service is injected into the component via dependency injection.
   // - See Dependency Injection in Angular --> https://angular.io/guide/dependency-injection
-  constructor(private pokemonService: PokemonService) {}
+  constructor(private pokemonService: PokemonService) { }
 
   // Angular Lifecycle Hook that is called after Angular has initialized all data bound properties
   // - See NgOnInit docs --> https://angular.io/api/core/OnInit
   // - See Angular Lifecycle Hooks --> https://angular.io/guide/lifecycle-hooks
   ngOnInit(): void {
     this.requestPokemonList();
+    console.log('i\'m waiting on the the list');
   }
 
   requestPokemonList(): void {
